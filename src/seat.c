@@ -28,12 +28,18 @@ configure_libinput(struct wlr_input_device *wlr_input_device)
 		warn("%s:%d: no libinput_dev", __FILE__, __LINE__);
 		return;
 	}
-	if (libinput_device_config_tap_get_finger_count(libinput_dev) <= 0) {
+	if !(libinput_device_config_tap_get_finger_count(libinput_dev) <= 0) {
+		info("tap enabled for libinput device");
+		libinput_device_config_tap_set_enabled(libinput_dev,
+			LIBINPUT_CONFIG_TAP_ENABLED);
+	}
+	
+	if (libinput_device_config_get_natural_scroll_enabled(libinput_dev) <= 0) {
 		return;
 	}
-	info("tap enabled for libinput device");
-	libinput_device_config_tap_set_enabled(libinput_dev,
-		LIBINPUT_CONFIG_TAP_ENABLED);
+	info("natural scroll enabled for libinput device");
+	libinput_device_config_scroll_set_natural_scroll_enabled(libinput_dev,
+		1);
 }
 
 void
